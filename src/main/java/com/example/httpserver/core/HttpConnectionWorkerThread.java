@@ -1,5 +1,7 @@
 package com.example.httpserver.core;
 
+import com.example.http.HttpParser;
+import com.example.http.HttpParsingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,6 +25,9 @@ public class HttpConnectionWorkerThread extends Thread {
 
         try {
             inputStream = socket.getInputStream();
+            HttpParser parser = new HttpParser();
+            parser.parseHttpRequest(inputStream);
+
             outputStream = socket.getOutputStream();
 
             String html = "<html><head><title>Simple Java HTTP Server</title></head><body><h1>This page was server using my simple Java HTTP Server</h1></body></html>";
@@ -42,6 +47,8 @@ public class HttpConnectionWorkerThread extends Thread {
         } catch (IOException e) {
             LOGGER.error("Problem with communication", e);
 
+        } catch (HttpParsingException e) {
+            throw new RuntimeException(e);
         } finally {
             if (inputStream != null) {
                 try {
