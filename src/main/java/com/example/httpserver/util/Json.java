@@ -9,11 +9,8 @@ public class Json {
     private static final Gson OBJECT_MAPPER = defaultObjectMapper();
 
     private static Gson defaultObjectMapper() {
-        Gson om = new GsonBuilder().setPrettyPrinting().create();
-
-        return om;
+        return new GsonBuilder().setPrettyPrinting().create();
     }
-
 
     public static <T> T fromJson(Reader node, Class<T> clazz) {
         return OBJECT_MAPPER.fromJson(node, clazz);
